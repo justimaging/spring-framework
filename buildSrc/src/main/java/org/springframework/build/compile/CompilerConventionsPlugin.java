@@ -43,7 +43,7 @@ public class CompilerConventionsPlugin implements Plugin<Project> {
 	 */
 	public static final String JAVA_SOURCE_VERSION_PROPERTY = "javaSourceVersion";
 
-	public static final JavaVersion DEFAULT_COMPILER_VERSION = JavaVersion.VERSION_1_8;
+	public static final JavaVersion DEFAULT_COMPILER_VERSION = JavaVersion.VERSION_11;
 
 	private static final List<String> COMPILER_ARGS;
 
