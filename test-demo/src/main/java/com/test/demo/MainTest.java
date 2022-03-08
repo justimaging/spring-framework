@@ -8,7 +8,8 @@ public class MainTest {
 		String names[] = annotationConfigApplicationContext.getBeanDefinitionNames();
 		for (String name :names){
 			System.out.println(name);
-
 		}
+		Car car = (Car) annotationConfigApplicationContext.getBean("car");
+		System.out.println(car.getName());
 	}
 }
