@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CarConfiguration {
 	@Bean
-	public Car getCar(){
+	public Car car(){
 		Car car = new Car();
 		car.setName("测试");
 		car.setTest(111);
