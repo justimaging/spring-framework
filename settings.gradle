@@ -1,18 +1,19 @@
 //执行顺序settings.gradle-->build.gradle(Project)-->build.gradle(Module)
 //settings.gradle文件是gradle项目的总体配置文件，一般会把子项目中通用的一些配置放在这个文件中，有点雷士与maven的parent pom 文件。
 //build.gradle文件则是针对单个项目的具体配置。
+//插件管理
 pluginManagement {
-	repositories {
+	repositories {//插件下载地址
 		gradlePluginPortal()
 		maven { url 'https://repo.spring.io/plugins-release' }
 	}
 }
-
+//实际用哪些插件
 plugins {
 	id "com.gradle.enterprise" version "3.2"
 //	id "io.spring.gradle-enterprise-conventions" version "0.0.2"
 }
-
+//包含哪些模块--类似于maven的module
 include "spring-aop"
 include "spring-aspects"
 include "spring-beans"
