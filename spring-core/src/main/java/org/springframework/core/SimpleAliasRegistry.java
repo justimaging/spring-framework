@@ -31,6 +31,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.util.StringValueResolver;
 
 /**
+ * 主要使用 map 作为 alias 的缓存，并对接口 AliasRegistry 进行实现
  * Simple implementation of the {@link AliasRegistry} interface.
  * <p>Serves as base class for
  * {@link org.springframework.beans.factory.support.BeanDefinitionRegistry}
@@ -54,7 +55,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 		Assert.hasText(name, "'name' must not be empty");
 		Assert.hasText(alias, "'alias' must not be empty");
 		synchronized (this.aliasMap) {
-			if (alias.equals(name)) {
+			if (alias.equals(name)) {//别名和原名不能一样
 				this.aliasMap.remove(alias);
 				if (logger.isDebugEnabled()) {
 					logger.debug("Alias definition '" + alias + "' ignored since it points to same name");
@@ -130,6 +131,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	}
 
 	/**
+	 * 遍历aliasMap ，逐个判断 键值对 key -value 的 value 是否 和给定的name 是否相等，如果相等，先加入result， 再递归查询 是否存在 指向 key 的别名， 存在就 加入
 	 * Transitively retrieve all aliases for the given name.
 	 * @param name the target name to find aliases for
 	 * @param result the resulting aliases list
@@ -138,12 +140,13 @@ public class SimpleAliasRegistry implements AliasRegistry {
 		this.aliasMap.forEach((alias, registeredName) -> {
 			if (registeredName.equals(name)) {
 				result.add(alias);
-				retrieveAliases(alias, result);
+				retrieveAliases(alias, result);//为什么要用别名再查一遍？
 			}
 		});
 	}
 
 	/**
+	 * 解决占位符问题
 	 * Resolve all alias target names and aliases registered in this
 	 * registry, applying the given {@link StringValueResolver} to them.
 	 * <p>The value resolver may for example resolve placeholders
@@ -185,6 +188,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	}
 
 	/**
+	 * 检查别名是否存在循环问题，如A的别名为B B的别名为A
 	 * Check whether the given name points back to the given alias as an alias
 	 * in the other direction already, catching a circular reference upfront
 	 * and throwing a corresponding IllegalStateException.
@@ -201,7 +205,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 		}
 	}
 
-	/**
+	/**根据别名获取注册的名字，例如存在 A->B ,B->C ,C->D ,输入A，最终获取到D
 	 * Determine the raw name, resolving aliases to canonical names.
 	 * @param name the user-specified name
 	 * @return the transformed name
