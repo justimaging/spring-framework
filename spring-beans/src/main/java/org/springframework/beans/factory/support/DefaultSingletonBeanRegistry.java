@@ -60,7 +60,8 @@ import org.springframework.util.StringUtils;
  * {@link AbstractBeanFactory} and {@link DefaultListableBeanFactory}
  * (which inherit from it). Can alternatively also be used as a nested
  * helper to delegate to.
- *
+ *继承了SimpleAliasRegistry并实现SingletonBeanRegistry，使得它既有管理SingletonBean的功能，
+ * 又提供了别名的功能，它是一个通用的存储共享bean实例的地方。
  * @author Juergen Hoeller
  * @since 2.0
  * @see #registerSingleton
@@ -73,43 +74,58 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	/** Maximum number of suppressed exceptions to preserve. */
 	private static final int SUPPRESSED_EXCEPTIONS_LIMIT = 100;
 
-
+	// 很显然：所有的单例bean最终都会到这里来
 	/** Cache of singleton objects: bean name to bean instance. */
 	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
 
+	//缓存了bean的name 和  ObjectFactory。  因为最终的Bean都是通过ObjectFactory的回调方法来创建的
 	/** Cache of singleton factories: bean name to ObjectFactory. */
 	private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<>(16);
 
+	// 缓存了已经存在单例，用于解决循环依赖的方法 循环依赖
+	// 是存放singletonFactory 制造出来的 singleton 的缓存早期单例对象缓存
 	/** Cache of early singleton objects: bean name to bean instance. */
 	private final Map<String, Object> earlySingletonObjects = new ConcurrentHashMap<>(16);
 
+	// 已经注册好的单例bean的名称们  和 singletonObjects保持同步
 	/** Set of registered singletons, containing the bean names in registration order. */
 	private final Set<String> registeredSingletons = new LinkedHashSet<>(256);
+    // ===================以上四个缓存是这个类存放单例bean的主要Map  ===========================
 
+	// 目前正在创建中的单例bean的名称的集合   存着正在初始化的Bean级不要再次发起初始化了 ===注意是正在===
 	/** Names of beans that are currently in creation. */
 	private final Set<String> singletonsCurrentlyInCreation =
 			Collections.newSetFromMap(new ConcurrentHashMap<>(16));
 
+	// 直接缓存当前不能加载的bean  这个值是留给开发者自己set的，Spring自己不会往里面放值~~~~
 	/** Names of beans currently excluded from in creation checks. */
 	private final Set<String> inCreationCheckExclusions =
 			Collections.newSetFromMap(new ConcurrentHashMap<>(16));
 
+	//存放异常出现的相关的原因的集合
 	/** Collection of suppressed Exceptions, available for associating related causes. */
 	@Nullable
 	private Set<Exception> suppressedExceptions;
 
+	//标志，指示我们目前是否在销毁单例中
 	/** Flag that indicates whether we're currently within destroySingletons. */
 	private boolean singletonsCurrentlyInDestruction = false;
 
+	// 一次性Bean  也就是说Bean是DisposableBean接口的实现
+	// 实现DisposableBean接口的类，在类销毁时，会调用destroy()方法，开发人员可以重写该方法完成自己的工作
+	// 目前向里添加的只有`AbstractBeanFactory#registerDisposableBeanIfNecessary`  其实还是来自于  doCreateBean方法
 	/** Disposable bean instances: bean name to disposable instance. */
 	private final Map<String, Object> disposableBeans = new LinkedHashMap<>();
 
+	//已存放到容器的bean集合
 	/** Map between containing bean names: bean name to Set of bean names that the bean contains. */
 	private final Map<String, Set<String>> containedBeanMap = new ConcurrentHashMap<>(16);
 
+	// 查找依赖的类   我依赖了哪些们
 	/** Map between dependent bean names: bean name to Set of dependent bean names. */
 	private final Map<String, Set<String>> dependentBeanMap = new ConcurrentHashMap<>(64);
 
+	//被依赖的bean key为beanName    我被哪些们依赖了
 	/** Map between depending bean names: bean name to Set of bean names for the bean's dependencies. */
 	private final Map<String, Set<String>> dependenciesForBeanMap = new ConcurrentHashMap<>(64);
 
