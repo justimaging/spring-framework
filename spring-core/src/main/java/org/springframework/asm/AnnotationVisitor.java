@@ -31,7 +31,10 @@ package org.springframework.asm;
  * A visitor to visit a Java annotation. The methods of this class must be called in the following
  * order: ( {@code visit} | {@code visitEnum} | {@code visitAnnotation} | {@code visitArray} )*
  * {@code visitEnd}.
- *
+ * https://www.cnblogs.com/zhangqian27/p/9799673.html
+ * https://www.jianshu.com/p/9e5ec01439a4
+ * https://blog.csdn.net/weixin_42127238/article/details/108550408
+ *是一个抽象类，定义在解析注解时会触发的事件，如解析到一个基本值类型的注解、enum值类型的注解、Array值类型的注解、注解值类型的注解等。
  * @author Eric Bruneton
  * @author Eugene Kuleshov
  */

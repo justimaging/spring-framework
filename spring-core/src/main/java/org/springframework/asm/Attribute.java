@@ -30,7 +30,7 @@ package org.springframework.asm;
 /**
  * A non standard class, field, method or Code attribute, as defined in the Java Virtual Machine
  * Specification (JVMS).
- *
+ *字节码中属性的类抽象。
  * @see <a href= "https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.7">JVMS
  *     4.7</a>
  * @see <a href= "https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.7.3">JVMS

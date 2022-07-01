@@ -127,6 +127,7 @@ class XmlBeanFactoryTests {
 
 	@Test  // SPR-2368
 	void collectionsReferredToAsRefLocals() {
+		BeanFactory bf = new XmlBeanFactory(new ClassPathResource(""));
 		DefaultListableBeanFactory factory = new DefaultListableBeanFactory();
 		new XmlBeanDefinitionReader(factory).loadBeanDefinitions(COLLECTIONS_XSD_CONTEXT);
 		factory.preInstantiateSingletons();

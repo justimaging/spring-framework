@@ -30,7 +30,7 @@ package org.springframework.asm;
 /**
  * A dynamically extensible vector of bytes. This class is roughly equivalent to a DataOutputStream
  * on top of a ByteArrayOutputStream, but is more efficient.
- *
+ *字节码二进制存储的容器
  * @author Eric Bruneton
  */
 public class ByteVector {

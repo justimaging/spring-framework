@@ -33,7 +33,7 @@ package org.springframework.asm;
  * instances can be chained in a doubly linked list, from which Runtime[In]Visible[Type]Annotations
  * attributes can be generated with the {@link #putAnnotations} method. Similarly, arrays of such
  * lists can be used to generate Runtime[In]VisibleParameterAnnotations attributes.
- *
+ *继承了 AnnotationVisitor 类，用于拼接注解相关字节码。
  * @see <a href="https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.7.16">JVMS
  *     4.7.16</a>
  * @see <a href="https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html#jvms-4.7.20">JVMS

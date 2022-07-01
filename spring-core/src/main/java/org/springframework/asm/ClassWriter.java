@@ -32,7 +32,7 @@ package org.springframework.asm;
  * Virtual Machine Specification (JVMS). It can be used alone, to generate a Java class "from
  * scratch", or with one or more {@link ClassReader} and adapter {@link ClassVisitor} to generate a
  * modified class from one or more existing Java classes.
- *
+ *它实现了ClassVisitor接口，用于拼接字节码。
  * @see <a href="https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html">JVMS 4</a>
  * @author Eric Bruneton
  */

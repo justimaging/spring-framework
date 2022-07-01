@@ -34,7 +34,7 @@ package org.springframework.asm;
  * visitTypeAnnotation} | {@code visitAttribute} )* ( {@code visitNestMember} | {@code
  * visitInnerClass} | {@code visitRecordComponent} | {@code visitField} | {@code visitMethod} )*
  * {@code visitEnd}.
- *
+ *定义在读取Class字节码时会触发的事件，如类头解析完成、注解解析、字段解析、方法解析等。
  * @author Eric Bruneton
  */
 public abstract class ClassVisitor {

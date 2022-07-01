@@ -36,7 +36,7 @@ import java.io.InputStream;
  * Virtual Machine Specification (JVMS). This class parses the ClassFile content and calls the
  * appropriate visit methods of a given {@link ClassVisitor} for each field, method and bytecode
  * instruction encountered.
- *
+ *字节码的读取与分析引擎。它采用类似SAX的事件读取机制，每当有事件发生时，调用注册的ClassVisitor、AnnotationVisitor、FieldVisitor、MethodVisitor做相应的处理
  * @see <a href="https://docs.oracle.com/javase/specs/jvms/se9/html/jvms-4.html">JVMS 4</a>
  * @author Eric Bruneton
  * @author Eugene Kuleshov

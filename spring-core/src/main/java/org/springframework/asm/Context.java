@@ -30,7 +30,7 @@ package org.springframework.asm;
 
 /**
  * Information about a class being parsed in a {@link ClassReader}.
- *
+ *定义了一些字节码及其属性
  * @author Eric Bruneton
  */
 final class Context {
