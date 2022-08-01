@@ -62,6 +62,10 @@ import org.springframework.util.StringUtils;
  * helper to delegate to.
  *继承了SimpleAliasRegistry并实现SingletonBeanRegistry，使得它既有管理SingletonBean的功能，
  * 又提供了别名的功能，它是一个通用的存储共享bean实例的地方。
+ * 三级缓存，循环依赖问题
+ * https://www.toutiao.com/article/6923080693522268675/?channel=&source=search_tab
+ * https://www.cnblogs.com/zzyang/archive/2022/05/23/16300811.html
+ * https://blog.csdn.net/fengyuyeguirenenen/article/details/123796784
  * @author Juergen Hoeller
  * @since 2.0
  * @see #registerSingleton
@@ -184,7 +188,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		return getSingleton(beanName, true);
 	}
 
-	/**
+	/**要获取一个bean，先从一级缓存一直查找到三级缓存
 	 * Return the (raw) singleton object registered under the given name.
 	 * <p>Checks already instantiated singletons and also allows for an early
 	 * reference to a currently created singleton (resolving a circular reference).
@@ -207,7 +211,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 						if (singletonObject == null) {
 							ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
 							if (singletonFactory != null) {
-								singletonObject = singletonFactory.getObject();
+								singletonObject = singletonFactory.getObject();//getObject获取到的可能是代理对象或者对象本身
 								this.earlySingletonObjects.put(beanName, singletonObject);
 								this.singletonFactories.remove(beanName);
 							}
