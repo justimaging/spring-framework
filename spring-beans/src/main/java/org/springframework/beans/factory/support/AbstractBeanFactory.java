@@ -253,6 +253,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		Object bean;
 
 		// Eagerly check singleton cache for manually registered singletons.
+		//检查缓存中或者实例工厂是否有对应的实例或者从 singletonFactories 中的 ObjectFactory 中获取
 		Object sharedInstance = getSingleton(beanName);
 		if (sharedInstance != null && args == null) {
 			if (logger.isTraceEnabled()) {
@@ -264,6 +265,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					logger.trace("Returning cached instance of singleton bean '" + beanName + "'");
 				}
 			}
+			// 返回对应的实例，有时候存在诸如 BeanFactory 的情况并不是直接返回实例本身
+			// 而是返回指定方法返回的实例
 			bean = getObjectForBeanInstance(sharedInstance, name, beanName, null);
 		}
 
@@ -1829,6 +1832,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	}
 
 	/**
+	 * - 验证 `bean` 类型**：判断是否是工厂 `bean`
+	 * - **对非 `FactoryBean` 不做处理**
+	 * - **对 `bean` 进行转换**
+	 * - **处理 `FactoryBean` 类型**：委托给 `getObjectFromFactoryBean` 方法进行处理。
 	 * Get the object for the given bean instance, either the bean
 	 * instance itself or its created object in case of a FactoryBean.
 	 * @param beanInstance the shared bean instance
@@ -1841,11 +1848,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			Object beanInstance, String name, String beanName, @Nullable RootBeanDefinition mbd) {
 
 		// Don't let calling code try to dereference the factory if the bean isn't a factory.
+		//如果beanName前缀是&符号
 		if (BeanFactoryUtils.isFactoryDereference(name)) {
-			if (beanInstance instanceof NullBean) {
+			if (beanInstance instanceof NullBean) {//kongbean直接返回
 				return beanInstance;
 			}
-			if (!(beanInstance instanceof FactoryBean)) {
+			if (!(beanInstance instanceof FactoryBean)) {//带&又不是factorybean则报错
 				throw new BeanIsNotAFactoryException(beanName, beanInstance.getClass());
 			}
 			if (mbd != null) {
@@ -1858,9 +1866,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		// If it's a FactoryBean, we use it to create a bean instance, unless the
 		// caller actually wants a reference to the factory.
 		if (!(beanInstance instanceof FactoryBean)) {
-			return beanInstance;
+			return beanInstance;//如果不是工厂bean 返回bean本身的类
 		}
 
+		//加载工厂bean 通过getobjec获取工厂bean中的实际bean
 		Object object = null;
 		if (mbd != null) {
 			mbd.isFactoryBean = true;

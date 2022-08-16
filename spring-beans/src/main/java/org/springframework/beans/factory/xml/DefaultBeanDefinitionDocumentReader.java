@@ -173,6 +173,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 				if (node instanceof Element) {
 					Element ele = (Element) node;
 					if (delegate.isDefaultNamespace(ele)) {//识别出默认标签的 bean 注册 根据元素名称，调用不同的加载方法，注册 bean
+						/****注册beandefinition***/
 						parseDefaultElement(ele, delegate);//默认标签解析 -   **IMPORT**：导入标签  **ALIAS**：别名标签  **BEAN**：`bean` 标签  NESTED\_BEANS**：`beans` 标签（嵌套的 `beans`)
 					}
 					else {
@@ -194,10 +195,10 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 			processAliasRegistration(ele);
 		}
 		else if (delegate.nodeNameEquals(ele, BEAN_ELEMENT)) {
-			processBeanDefinition(ele, delegate);
+			processBeanDefinition(ele, delegate);/****注册beandefinition***/
 		}
 		else if (delegate.nodeNameEquals(ele, NESTED_BEANS_ELEMENT)) {
-			// recurse
+			// recurse/****注册beandefinition***/
 			doRegisterBeanDefinitions(ele);
 		}
 	}

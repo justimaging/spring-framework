@@ -1381,6 +1381,10 @@ public class BeanDefinitionParserDelegate {
 	}
 
 	/**
+	 * Spring` 遇到自定义标签是，加载自定义的大致流程：
+	 * 1、定位 `spring.hanlders` 和 `spring.schemas`**：在两个文件中找到对应的 `handler` 和 `XSD`，默认位置在 `resources` -> `META-INF`。
+	 * 2、`Handler` 注册 `Parser`**：扩展了 `NamespaceHandlerSupport` 的类，在初始化注册解析器
+	 * 3、运行解析器  `Parser`**：扩展了 `AbstractSingleBeanDefinitionParser`，通过重载方法进行属性解析，完成解析。
 	 * Parse a custom element (outside of the default namespace).
 	 * @param ele the element to parse
 	 * @param containingBd the containing bean definition (if any)
@@ -1388,16 +1392,16 @@ public class BeanDefinitionParserDelegate {
 	 */
 	@Nullable
 	public BeanDefinition parseCustomElement(Element ele, @Nullable BeanDefinition containingBd) {
-		String namespaceUri = getNamespaceURI(ele);
+		String namespaceUri = getNamespaceURI(ele);//找到命名空间
 		if (namespaceUri == null) {
 			return null;
 		}
-		NamespaceHandler handler = this.readerContext.getNamespaceHandlerResolver().resolve(namespaceUri);
+		NamespaceHandler handler = this.readerContext.getNamespaceHandlerResolver().resolve(namespaceUri);//根据命名空间找到对应的 NamespaceHandler
 		if (handler == null) {
 			error("Unable to locate Spring NamespaceHandler for XML schema namespace [" + namespaceUri + "]", ele);
 			return null;
 		}
-		return handler.parse(ele, new ParserContext(this.readerContext, this, containingBd));
+		return handler.parse(ele, new ParserContext(this.readerContext, this, containingBd));//调用自定义的 NamespaceHandler 进行解析
 	}
 
 	/**
