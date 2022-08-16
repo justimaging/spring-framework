@@ -21,6 +21,9 @@ import org.springframework.lang.Nullable;
 
 /**
  * bean后置处理器：用于处理自定义注解或打印bean初始化日志等
+ * 我们先了解什么是BeanPostProcessor，是在创建Bean之前以及创建Bean之后的一种后置处理器，这里就简单的讲一下这个，就是在我们使用的这些注解，例如
+ * ：@Async （异步执行），@Bean，@Component、@Autowired、@PropertySource等等都需要经过BeanPostProcessor去处理才能加载到容器当中，
+
  * Factory hook that allows for custom modification of new bean instances &mdash;
  * for example, checking for marker interfaces or wrapping beans with proxies.
  *

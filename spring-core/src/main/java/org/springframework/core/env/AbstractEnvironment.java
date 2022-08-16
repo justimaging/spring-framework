@@ -34,6 +34,11 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * Spring` 环境和属性是由四个部分组成：
+ * `Environment` ： 环境，由 `Profile` 和 `PropertyResolver` 组合。
+ * `Profile` : 配置文件，可以理解为，容器里多个配置组别的属性和 `bean`，只有激活的 `profile`，它对应的组别属性和 `bean` 才会被加载
+ * `PropertySource` ： 属性源， 使用 `CopyOnWriteArrayList`数组进行属性对 `key-value` 形式存储
+ * `PropertyResolver` ：属性解析器，这个用途就是解析属性
  * Abstract base class for {@link Environment} implementations. Supports the notion of
  * reserved default profile names and enables specifying active and default profiles
  * through the {@link #ACTIVE_PROFILES_PROPERTY_NAME} and

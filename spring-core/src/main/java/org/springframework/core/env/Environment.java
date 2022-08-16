@@ -17,6 +17,12 @@
 package org.springframework.core.env;
 
 /**
+ *
+ * Spring` 环境和属性是由四个部分组成：
+ * `Environment` ： 环境，由 `Profile` 和 `PropertyResolver` 组合。
+ * `Profile` : 配置文件，可以理解为，容器里多个配置组别的属性和 `bean`，只有激活的 `profile`，它对应的组别属性和 `bean` 才会被加载
+ * `PropertySource` ： 属性源， 使用 `CopyOnWriteArrayList`数组进行属性对 `key-value` 形式存储
+ * `PropertyResolver` ：属性解析器，这个用途就是解析属性
  * Interface representing the environment in which the current application is running.
  * Models two key aspects of the application environment: <em>profiles</em> and
  * <em>properties</em>. Methods related to property access are exposed via the

@@ -17,6 +17,8 @@
 package org.springframework.beans.factory;
 
 /**
+ * 在Spring当中有一些内置的对象是未开放给我们使用的，例如Spring的上下文ApplicationContext、环境属性Environment，BeanFactory等等其他的一些内置对象，
+ * 而在我们可以通过实现对应的Aware接口去拿到我们想要的一些属性，一般命名都是xxxAware，在创建对象的时候, 会调用接口规定的方法注入到相关组件:Aware
  * A marker superinterface indicating that a bean is eligible to be notified by the
  * Spring container of a particular framework object through a callback-style method.
  * The actual method signature is determined by individual subinterfaces but should

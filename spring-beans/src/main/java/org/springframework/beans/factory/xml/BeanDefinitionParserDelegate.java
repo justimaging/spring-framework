@@ -406,39 +406,48 @@ public class BeanDefinitionParserDelegate {
 	}
 
 	/**
+	 * 该方法主要工作流程如下：
+	 * -   **提取元素中的 `id` `name` 属性**
+	 * -   **进一步解析其它所有属性并统一封装到 `GenericBeanDefinition`类型的实例中**
+	 * -   **检测到 `bean` 没有指定 `beanName`** 使用默认规则生成 `beanName`
+	 * -   **将获取到的信息封装到 `BeanDefinitionHolder` 的实例中**
 	 * Parses the supplied {@code <bean>} element. May return {@code null}
 	 * if there were errors during parse. Errors are reported to the
 	 * {@link org.springframework.beans.factory.parsing.ProblemReporter}.
 	 */
 	@Nullable
 	public BeanDefinitionHolder parseBeanDefinitionElement(Element ele, @Nullable BeanDefinition containingBean) {
-		String id = ele.getAttribute(ID_ATTRIBUTE);
-		String nameAttr = ele.getAttribute(NAME_ATTRIBUTE);
+		String id = ele.getAttribute(ID_ATTRIBUTE);// 获取 ID 属性
+		String nameAttr = ele.getAttribute(NAME_ATTRIBUTE);// 获取 NAME 属性
 
 		List<String> aliases = new ArrayList<>();
 		if (StringUtils.hasLength(nameAttr)) {
-			String[] nameArr = StringUtils.tokenizeToStringArray(nameAttr, MULTI_VALUE_ATTRIBUTE_DELIMITERS);
+			String[] nameArr = StringUtils.tokenizeToStringArray(nameAttr, MULTI_VALUE_ATTRIBUTE_DELIMITERS);// 名称按照 , ; 进行分割
 			aliases.addAll(Arrays.asList(nameArr));
 		}
 
 		String beanName = id;
 		if (!StringUtils.hasText(beanName) && !aliases.isEmpty()) {
-			beanName = aliases.remove(0);
+			beanName = aliases.remove(0);// 如果没有指定 id，将 name 的第一个值作为 id
 			if (logger.isTraceEnabled()) {
 				logger.trace("No XML 'id' specified - using '" + beanName +
 						"' as bean name and " + aliases + " as aliases");
 			}
 		}
 
-		if (containingBean == null) {
+		if (containingBean == null) {// 默认 null
+			// 检查名字是否唯一，如果 id 重复了，将抛出错误
+			// 内部 usedNames 是一个 HashSet，将会存储加载过的 name 和 aliases
 			checkNameUniqueness(beanName, aliases, ele);
 		}
 
+		// 将公共属性放入 AbstractBeanDefinition，具体实现在子类 GenericBeanDefinition
 		AbstractBeanDefinition beanDefinition = parseBeanDefinitionElement(ele, beanName, containingBean);
 		if (beanDefinition != null) {
 			if (!StringUtils.hasText(beanName)) {
 				try {
 					if (containingBean != null) {
+						// 如果 id 和 name 都是空，那个 spring 会给它生成一个默认的名称 规则待细看
 						beanName = BeanDefinitionReaderUtils.generateBeanName(
 								beanDefinition, this.readerContext.getRegistry(), true);
 					}

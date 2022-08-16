@@ -211,7 +211,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 	 * @see #loadBeanDefinitions(org.springframework.core.io.Resource[])
 	 */
 	public int loadBeanDefinitions(String location, @Nullable Set<Resource> actualResources) throws BeanDefinitionStoreException {
-		ResourceLoader resourceLoader = getResourceLoader();
+		ResourceLoader resourceLoader = getResourceLoader();//获取资源文件（资源加载器从路径识别资源文件）
 		if (resourceLoader == null) {
 			throw new BeanDefinitionStoreException(
 					"Cannot load bean definitions from location [" + location + "]: no ResourceLoader available");
@@ -221,7 +221,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 			// Resource pattern matching available.
 			try {
 				Resource[] resources = ((ResourcePatternResolver) resourceLoader).getResources(location);
-				int count = loadBeanDefinitions(resources);
+				int count = loadBeanDefinitions(resources);//根据资源文件加载 bean
 				if (actualResources != null) {
 					Collections.addAll(actualResources, resources);
 				}
