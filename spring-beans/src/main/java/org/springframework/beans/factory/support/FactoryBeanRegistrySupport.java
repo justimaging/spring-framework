@@ -111,7 +111,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 								// Temporarily return non-post-processed object, not storing it yet..
 								return object;
 							}
-							beforeSingletonCreation(beanName);
+							beforeSingletonCreation(beanName);// 单例操作，前置操作 用来保存和移除类加载的状态，是用来对循环依赖进行检测的。**
 							try {
 								object = postProcessObjectFromFactoryBean(object, beanName);
 							}
@@ -120,7 +120,7 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
 										"Post-processing of FactoryBean's singleton object failed", ex);
 							}
 							finally {
-								afterSingletonCreation(beanName);
+								afterSingletonCreation(beanName);// 单例模式，后置操作 用来保存和移除类加载的状态，是用来对循环依赖进行检测的。**
 							}
 						}
 						if (containsSingleton(beanName)) {

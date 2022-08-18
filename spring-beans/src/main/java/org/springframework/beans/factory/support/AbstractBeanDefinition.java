@@ -1124,6 +1124,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	}
 
 	/**
+	 * 获取类的重载方法列表，然后遍历，一个一个进行处理。具体处理的是 `lookup-method` 和 `replaced-method` 属性，这个步骤解析的配置将会存入 `beanDefinition` 中的 `methodOverrides` 属性里，是为了待会实例化做准备。
 	 * Validate and prepare the method overrides defined for this bean.
 	 * Checks for existence of a method with the specified name.
 	 * @throws BeanDefinitionValidationException in case of validation failure
@@ -1151,6 +1152,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 		}
 		else if (count == 1) {
 			// Mark override as not overloaded, to avoid the overhead of arg type checking.
+			//如果 `bean` 在实例化时，监测到 `methodOverrides` 属性，会动态地位当前 `bean` 生成代理，使用对应的拦截器为 `bean` 做增强处理。
 			mo.setOverloaded(false);
 		}
 	}
