@@ -7,7 +7,9 @@ package base.circle;
 public class CircleB {
 
 	private CircleA circleA;
-
+	/*CircleB(CircleA circleA){
+		this.circleA = circleA;
+	}*/
 
 	/**
 	 * 设定一个方法，调用 A 类的方法，这两个方法互相调用

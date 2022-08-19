@@ -3,7 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	<!-- beanPostProcessor -->
-<!--	<bean id="carPostProcessor" class="context.bean.CarBeanPostProcessor"/>-->
+	<bean id="carPostProcessor" class="context.bean.CarBeanPostProcessor"/>
 
 	<!--用以下两个 bean 进行测试打印时间和顺序-->
 	<bean id="car" class="base.factory.bean.Car">

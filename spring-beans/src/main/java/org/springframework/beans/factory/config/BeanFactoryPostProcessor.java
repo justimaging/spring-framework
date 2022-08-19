@@ -19,6 +19,7 @@ package org.springframework.beans.factory.config;
 import org.springframework.beans.BeansException;
 
 /**
+ * 是 `Spring` 对外提供可扩展的接口，能够在容器加载了所有 `bean` 信息（`AbstractApplicationContext#obtainFreshBeanFactory` 方法）之后，`bean` 实例化之前执行，用来修改 `bean` 的定义属性。**
  * Factory hook that allows for custom modification of an application context's
  * bean definitions, adapting the bean property values of the context's underlying
  * bean factory.

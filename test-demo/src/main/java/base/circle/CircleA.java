@@ -8,7 +8,9 @@ public class CircleA {
 
 	private CircleB circleB;
 
-
+	/*CircleA(CircleB circleB){
+		this.circleB = circleB;
+	}*/
 	/**
 	 * 设定一个函数，调用 B 类的方法
 	 */
