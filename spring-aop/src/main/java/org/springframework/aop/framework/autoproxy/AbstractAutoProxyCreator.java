@@ -240,20 +240,26 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		return wrapIfNecessary(bean, beanName, cacheKey);
 	}
 
+	/*1. **获取所有 beanName，会将之前在 beanFactory 中注册的 bean 都提取出来。**
+	2. **遍历前一步骤提取出来的 bean 列表，找出打上 @AspectJ 注解的类，进行进一步处理**
+	3. **继续对前一步提取的 @AspectJ 注解的类进行增强器的提取**
+	4. **将提取结果加入缓存中***/
 	@Override
 	public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) {
-		Object cacheKey = getCacheKey(beanClass, beanName);
+		Object cacheKey = getCacheKey(beanClass, beanName);// 组装 key
 
 		if (!StringUtils.hasLength(beanName) || !this.targetSourcedBeans.contains(beanName)) {
-			if (this.advisedBeans.containsKey(cacheKey)) {
+			if (this.advisedBeans.containsKey(cacheKey)) {// 不需增强
 				return null;
 			}
+			// 给定的 bean 类是否代表一个基础设施类，基础设置类不应代理 || 配置了指定 bean 不需要代理
 			if (isInfrastructureClass(beanClass) || shouldSkip(beanClass, beanName)) {
 				this.advisedBeans.put(cacheKey, Boolean.FALSE);
 				return null;
 			}
 		}
 
+		//如果存在目标代理类这创建代理 限制不必要的目标初始化示例：自定义方式处理
 		// Create proxy here if we have a custom TargetSource.
 		// Suppresses unnecessary default instantiation of the target bean:
 		// The TargetSource will handle target instances in a custom fashion.
@@ -262,8 +268,9 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 			if (StringUtils.hasLength(beanName)) {
 				this.targetSourcedBeans.add(beanName);
 			}
+			// 如果存在增强方法则创建代理
 			Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(beanClass, beanName, targetSource);
-			Object proxy = createProxy(beanClass, beanName, specificInterceptors, targetSource);
+			Object proxy = createProxy(beanClass, beanName, specificInterceptors, targetSource);// 创建代理
 			this.proxyTypes.put(cacheKey, proxy.getClass());
 			return proxy;
 		}
@@ -419,6 +426,13 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	}
 
 	/**
+	 * 对于代理类的创建和处理， `Spring` 委托给了 `ProxyFactory` 去处理，在上面贴出的函数主要是对 `ProxyFactory` 的初始化操作，进而对真正的创建代理做准备，主要流程如下：**
+	 * 1. **获取当前类的属性**
+	 * 2. **添加代理接口**
+	 * 3. **封装 Advisor 并加入到 ProxyFactory**
+	 * 4. **设置要代理的类**
+	 * 5. **为子类提供定制的函数 customizeProxyFactory，子类通过该方法对 ProxyFactory 进行进一步的封装**
+	 * 6. **进行获取代理操作
 	 * Create an AOP proxy for the given bean.
 	 * @param beanClass the class of the bean
 	 * @param beanName the name of the bean
@@ -437,27 +451,31 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		}
 
 		ProxyFactory proxyFactory = new ProxyFactory();
-		proxyFactory.copyFrom(this);
-
+		proxyFactory.copyFrom(this);// 拷贝，获取当前类中的相关属性
+		// 决定对于给定 bean 是否应该使用 targetClass 而不是他的接口代理
 		if (!proxyFactory.isProxyTargetClass()) {
+			// 检查 proxyTargetClass 设置以及 preserveTargetClass 属性
 			if (shouldProxyTargetClass(beanClass, beanName)) {
 				proxyFactory.setProxyTargetClass(true);
 			}
 			else {
+				// 添加代理接口
 				evaluateProxyInterfaces(beanClass, proxyFactory);
 			}
 		}
-
+		// 这一步中，主要将拦截器封装为增强器
 		Advisor[] advisors = buildAdvisors(beanName, specificInterceptors);
 		proxyFactory.addAdvisors(advisors);
 		proxyFactory.setTargetSource(targetSource);
-		customizeProxyFactory(proxyFactory);
+		customizeProxyFactory(proxyFactory);// 定制代理
 
+		// 用来控制代理工厂被配置之后，是否含允许修改通知
+		// 缺省值为 false，不允许修改代理的配置
 		proxyFactory.setFrozen(this.freezeProxy);
 		if (advisorsPreFiltered()) {
 			proxyFactory.setPreFiltered(true);
 		}
-
+		// 生成代理，委托给了 ProxyFactory 去处理。
 		return proxyFactory.getProxy(getProxyClassLoader());
 	}
 

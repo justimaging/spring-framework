@@ -7,7 +7,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * aop 测试启动类
  * @author JingQ at 2019-06-20
  */
-public class AopTestBootstrap {
+public class AopTestmain {
 
 	public static void main(String[] args) {
 		ApplicationContext context = new ClassPathXmlApplicationContext("aop/aop.xml");
