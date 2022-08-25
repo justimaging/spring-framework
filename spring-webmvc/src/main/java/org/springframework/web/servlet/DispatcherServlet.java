@@ -493,15 +493,15 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * <p>May be overridden in subclasses in order to initialize further strategy objects.
 	 */
 	protected void initStrategies(ApplicationContext context) {
-		initMultipartResolver(context);
-		initLocaleResolver(context);
-		initThemeResolver(context);
-		initHandlerMappings(context);
-		initHandlerAdapters(context);
-		initHandlerExceptionResolvers(context);
-		initRequestToViewNameTranslator(context);
-		initViewResolvers(context);
-		initFlashMapManager(context);
+		initMultipartResolver(context);// 初始化 multipartResolver 文件上传相关
+		initLocaleResolver(context);// 初始化 LocalResolver 与国际化相关
+		initThemeResolver(context);// 初始化 ThemeResolver 与主题更换相关
+		initHandlerMappings(context);// 初始化 HandlerMapping 与匹配处理器相关
+		initHandlerAdapters(context);// 初始化 HandlerAdapter 处理当前 Http 请求的处理器适配器实现，根据处理器映射返回相应的处理器类型
+		initHandlerExceptionResolvers(context);// 初始化 HandlerExceptionResolvers，处理器异常解决器
+		initRequestToViewNameTranslator(context);// 初始化 RequestToViewNameTranslator，处理逻辑视图名称
+		initViewResolvers(context);// 初始化 ViewResolver 选择合适的视图进行渲染
+		initFlashMapManager(context);// 初始化 FlashMapManager 使用 flash attributes 提供了一个请求存储属性，可供其他请求使用（重定向时常用）
 	}
 
 	/**
