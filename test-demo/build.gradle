@@ -19,8 +19,11 @@ dependencies {
     compile(project(":spring-context"))
     compile(project(":spring-instrument"))
     compile(project(":spring-aop"))
-    compile(project(":spring-tx"))  // for JPA, @Transactional support
     compile("org.aspectj:aspectjweaver:1.9.6")
+    compile(project(":spring-jdbc"))  // for Quartz support
+    compile(project(":spring-tx"))  // for Quartz support
+    compile("mysql:mysql-connector-java:5.1.6")
+//    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.6'
 
 }
 

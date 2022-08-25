@@ -133,6 +133,7 @@ public interface TransactionDefinition {
 
 
 	/**
+	 * DEFAULT为数据源（数据库）的默认隔离级别，以目前常用的MySQL为例，默认的隔离级别通常为REPEATABLE_READ。
 	 * Use the default isolation level of the underlying datastore.
 	 * All other levels correspond to the JDBC isolation levels.
 	 * @see java.sql.Connection
