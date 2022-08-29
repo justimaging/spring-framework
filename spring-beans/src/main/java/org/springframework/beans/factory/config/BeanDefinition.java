@@ -161,6 +161,8 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	String[] getDependsOn();
 
 	/**
+	 * spring <bean>标签的 autowire-candidate属性设置为false，容器在查找自动装配对象时，将不考虑该bean，
+	 * 即该bean不会被作为其它bean自动装配的候选者，但该bean本身还是可以使用自动装配来注入其它bean的。
 	 * Set whether this bean is a candidate for getting autowired into some other bean.
 	 * <p>Note that this flag is designed to only affect type-based autowiring.
 	 * It does not affect explicit references by name, which will get resolved even
