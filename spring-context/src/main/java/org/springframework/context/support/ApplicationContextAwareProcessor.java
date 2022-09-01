@@ -35,6 +35,10 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.StringValueResolver;
 
 /**
+ * https://www.cnblogs.com/xmzpc/p/15882265.html
+ * https://zhuanlan.zhihu.com/p/537449246
+ * ApplicationContextAwareProcessor是一个bean后置处理器，用来处理用到的感知接口（实现spring中aware结尾的接口）
+ * 向某些实现了Aware的接口的bean设置ApplicationContext中的相应属性。
  * {@link BeanPostProcessor} implementation that supplies the {@code ApplicationContext},
  * {@link org.springframework.core.env.Environment Environment}, or
  * {@link StringValueResolver} for the {@code ApplicationContext} to beans that
