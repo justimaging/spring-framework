@@ -725,6 +725,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.registerResolvableDependency(ApplicationEventPublisher.class, this);
 		beanFactory.registerResolvableDependency(ApplicationContext.class, this);
 
+		//该BeanPostProcessor检测那些实现了接口ApplicationListener的bean，在它们创建时初始化之后，
+		// 将它们添加到应用上下文的事件多播器上；并在这些ApplicationListener bean销毁之前，将它们从应用上下文的事件多播器上移除。
 		// Register early post-processor for detecting inner beans as ApplicationListeners.
 		beanFactory.addBeanPostProcessor(new ApplicationListenerDetector(this));
 
